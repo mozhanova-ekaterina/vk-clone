@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Lexend } from "next/font/google";
 import "./globals.css";
+import StoreProvider from "./StoreProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const lexend = Lexend({
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -11,12 +14,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${lexend.className} antialiased`}>
+        <StoreProvider>
+          {children}
+          {modal}
+        </StoreProvider>
+      </body>
     </html>
   );
 }
