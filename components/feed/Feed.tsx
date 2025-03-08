@@ -45,7 +45,11 @@ export const Feed = observer(() => {
       ) : (
         <>
           {postStore.posts.map((post) => (
-            <PostItem key={post.id} post={post} />
+            <PostItem
+              key={post.id}
+              post={post}
+              toggleLike={() => postStore.toggleLike(post.id)}
+            />
           ))}
 
           {postStore.isFetchingMore &&

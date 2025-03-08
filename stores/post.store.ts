@@ -1,11 +1,5 @@
-import {
-  createPost,
-  fetchComments,
-  fetchPostById,
-  fetchPosts,
-} from "@/lib/api/posts/route";
-import { Comment } from "@/types/comments";
-import { Post } from "@/types/post";
+import { createPost, fetchPostById, fetchPosts } from "@/lib/api/posts/route";
+import { Post } from "@/lib/schemas";
 import { makeAutoObservable, runInAction } from "mobx";
 
 export class PostStore {
@@ -23,13 +17,22 @@ export class PostStore {
   error: string | null = null;
   postError: string | null = null;
 
-
   // isLoading — начальная загрузка (первый запрос)
   //isFetchingMore — последующие запросы (пагинация)
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  toggleLike = (postId: string) => {
+    const post = this.posts.find((post) => post.id === postId);
+    if (post) {
+      post.liked = !post.liked;
+      post.likes += post.liked ? 1 : -1;
+    }
+    console.log('liked');
+    
+  };
 
   async loadPosts(initialLoad = false) {
     try {
@@ -76,11 +79,9 @@ export class PostStore {
       const post = await fetchPostById(id);
 
       runInAction(() => {
-        this.currentPost = post;
+        this.currentPost = post as Post;
         this.postError = null;
       });
-
-      await this.loadComments(id);
     } catch (error) {
       runInAction(() => {
         this.postError = "Ошибка загрузки поста";
@@ -90,24 +91,6 @@ export class PostStore {
       runInAction(() => {
         this.isPostLoading = false;
       });
-    }
-  }
-
-  async loadComments(postId: string) {
-    try {
-      runInAction(() => {
-        this.areCommentsLoading = true;
-      });
-
-      const { data, total } = await fetchComments(postId, this.commentsPage);
-
-      runInAction(() => {
-        this.comments = data;
-        this.commentsPage += 1;
-        this.commentsTotal = total;
-      });
-    } finally {
-      this.areCommentsLoading = false;
     }
   }
 

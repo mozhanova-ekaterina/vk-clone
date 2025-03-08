@@ -1,13 +1,6 @@
-import {
-  generateComment,
-  generateComments,
-  generatePost,
-  generatePosts,
-} from "@/lib/mocks/posts";
-import { Post } from "@/types/post";
+import { generatePost, generatePosts } from "@/lib/mocks/posts";
 
 let mockPosts = generatePosts(60);
-let mockComments = mockPosts.flatMap((post) => generateComments(post.id));
 
 export const fetchPosts = async (page: number, pageSize = 10) => {
   await new Promise((resolve) => setTimeout(resolve, 500)); // Задержка 500ms
@@ -24,7 +17,7 @@ export const fetchPosts = async (page: number, pageSize = 10) => {
 export const fetchPostById = async (id: string) => {
   await new Promise((resolve) => setTimeout(resolve, 500)); // Задержка 500ms
 
-  return mockPosts.find((post) => post.id === id) as Post;
+  return mockPosts.find((post) => post.id === id);
 };
 
 export const fetchPost = async (postId: string) => {
@@ -33,41 +26,26 @@ export const fetchPost = async (postId: string) => {
   return mockPosts.find((post) => post.id === postId);
 };
 
-export const fetchComments = async (
-  postId: string,
-  page: number,
-  pageSize = 5
-) => {
-  await new Promise((resolve) => setTimeout(resolve, 500)); // Задержка 500ms
 
-  const start = (page - 1) * pageSize;
-  const end = start + pageSize;
+// export const addComment = async (commentData: {
+//   postId: string;
+//   text: string
+//   author: string
+//   authorAvatar: string
+// }) => {
+//   await new Promise((resolve) => setTimeout(resolve, 300)); // Имитация загрузки
 
-  return {
-    data: mockComments.filter((comment) => comment.postId === postId).slice(start, end),
-    total: mockComments.length
-  }
-};
+//   const newComment = {
+//     ...generateComment(commentData.postId),
+//     text: commentData.text,
+//     author: commentData.author,
+//     authorAvatar: commentData.authorAvatar
+//   };
 
-export const addComment = async (commentData: {
-  postId: string;
-  text: string
-  author: string
-  authorAvatar: string
-}) => {
-  await new Promise((resolve) => setTimeout(resolve, 300)); // Имитация загрузки
+//   mockComments = [newComment, ...mockComments]; // Оптимистичное обновление
 
-  const newComment = {
-    ...generateComment(commentData.postId),
-    text: commentData.text,
-    author: commentData.author,
-    authorAvatar: commentData.authorAvatar
-  };
-
-  mockComments = [newComment, ...mockComments]; // Оптимистичное обновление
-
-  return newComment;
-}
+//   return newComment;
+// }
 
 export const createPost = async (postData: {
   caption: string;

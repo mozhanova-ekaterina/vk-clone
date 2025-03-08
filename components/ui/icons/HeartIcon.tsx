@@ -1,17 +1,31 @@
 import { SVGProps } from "react";
 
-export function HeartIcon(props: SVGProps<SVGSVGElement>) {
+const variants = {
+  fill: {
+    liked: "hsl(var(--primary))",
+    unliked: "hsl(var(--background))",
+  },
+  stroke: {
+    liked: "hsl(var(--primary))",
+    unliked: "hsl(var(--foreground))",
+  },
+};
+
+export function HeartIcon({
+  variant = "unliked",
+  ...props
+}: SVGProps<SVGSVGElement> & { variant?: "liked" | "unliked" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width="1.5em"
+      height="1.5em"
       viewBox="0 0 24 24"
       {...props}
     >
       <path
-        fill="none"
-        stroke="currentColor"
+        fill={variants.fill[variant]}
+        stroke={variants.stroke[variant]}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
