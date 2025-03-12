@@ -1,6 +1,6 @@
 "use client";
 import { observer } from "mobx-react-lite";
-import { PostItem } from "../post/Post";
+import PostItem from "../post/Post";
 import { useStore } from "@/lib/hooks/useStore";
 import { useCallback, useEffect } from "react";
 import { SkeletonPost } from "../skeletons/SkeletonPost";
@@ -48,7 +48,6 @@ export const Feed = observer(() => {
             <PostItem
               key={post.id}
               post={post}
-              toggleLike={() => postStore.toggleLike(post.id)}
             />
           ))}
 

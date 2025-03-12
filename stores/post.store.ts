@@ -1,5 +1,6 @@
-import { createPost, fetchPostById, fetchPosts } from "@/lib/api/posts/route";
-import { Post } from "@/lib/schemas";
+import { fetchPostById, fetchPosts, updatePost } from "@/lib/api/posts/route";
+import { generateComment } from "@/lib/mocks/comments";
+import { Comment, Post, User } from "@/lib/schemas";
 import { makeAutoObservable, runInAction } from "mobx";
 
 export class PostStore {
@@ -30,9 +31,33 @@ export class PostStore {
       post.liked = !post.liked;
       post.likes += post.liked ? 1 : -1;
     }
-    console.log('liked');
-    
+    this.updatePost(post as Post);
   };
+
+  addComment = (postId: string, text: string, user: User | null = null) => {
+    const comment = generateComment(postId);
+    comment.text = text;
+    user && (comment.author = user);
+    this.comments.unshift(comment);
+    updatePost({ ...this.currentPost!, comments: this.comments });
+  };
+
+  async updatePost(post: Post) {
+    try {
+      runInAction(() => {
+        this.isPostLoading = true;
+      });
+
+      const updatedPost = await updatePost(post);
+
+      runInAction(() => {
+        this.currentPost = updatedPost;
+        this.isPostLoading = false;
+      });
+    } catch (error) {
+      console.log("Ошибка обновления поста", error);
+    }
+  }
 
   async loadPosts(initialLoad = false) {
     try {
@@ -71,15 +96,14 @@ export class PostStore {
   async loadPost(id: string) {
     try {
       runInAction(() => {
-        this.currentPost = null;
-        this.postError = null;
         this.isPostLoading = true;
       });
 
-      const post = await fetchPostById(id);
+      const data = await fetchPostById(id);
 
       runInAction(() => {
-        this.currentPost = post as Post;
+        this.currentPost = data as Post;
+        this.comments = data?.comments || [];
         this.postError = null;
       });
     } catch (error) {
@@ -100,18 +124,10 @@ export class PostStore {
     this.postError = null;
   }
 
-  async addPost(caption: string, imageFile: File) {
-    try {
-      const newPost = await createPost({ caption, imageFile });
-      runInAction(() => {
-        this.posts.unshift(newPost);
-      });
-    } catch (error) {
-      console.error("Ошибка создания поста:", error);
-    }
-  }
+  async addPost(caption: string, imageFile: File) {}
 }
 
+//!!!:
 //Когда использовать runInAction?
 //После await в асинхронных методах
 //При изменении нескольких наблюдаемых полей подряд

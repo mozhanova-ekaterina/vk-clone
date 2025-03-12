@@ -1,4 +1,5 @@
-import { generatePost, generatePosts } from "@/lib/mocks/posts";
+import { generatePosts } from "@/lib/mocks/posts";
+import { Post } from "@/lib/schemas";
 
 let mockPosts = generatePosts(60);
 
@@ -26,39 +27,19 @@ export const fetchPost = async (postId: string) => {
   return mockPosts.find((post) => post.id === postId);
 };
 
+export const updatePost = async (post: Post) => {
+  await new Promise((resolve) => setTimeout(resolve, 500)); // Задержка 500ms
 
-// export const addComment = async (commentData: {
-//   postId: string;
-//   text: string
-//   author: string
-//   authorAvatar: string
-// }) => {
-//   await new Promise((resolve) => setTimeout(resolve, 300)); // Имитация загрузки
+  const index = mockPosts.findIndex((p) => p.id === post.id);
+  if (index !== -1) {
+    mockPosts[index] = post;
+  }
 
-//   const newComment = {
-//     ...generateComment(commentData.postId),
-//     text: commentData.text,
-//     author: commentData.author,
-//     authorAvatar: commentData.authorAvatar
-//   };
+  return post;
+};
 
-//   mockComments = [newComment, ...mockComments]; // Оптимистичное обновление
-
-//   return newComment;
-// }
-
-export const createPost = async (postData: {
-  caption: string;
-  imageFile: File;
-}) => {
-  await new Promise((resolve) => setTimeout(resolve, 300)); // Имитация загрузки
-
-  const newPost = {
-    ...generatePost(),
-    caption: postData.caption,
-  };
-
-  mockPosts = [newPost, ...mockPosts]; // Оптимистичное обновление
-
-  return newPost;
+export const createPost = async (post: Post) => {
+  await new Promise((resolve) => setTimeout(resolve, 500)); // Задержка 500ms
+  mockPosts.unshift(post);
+  return post;
 };

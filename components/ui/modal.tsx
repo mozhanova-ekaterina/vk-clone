@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -16,14 +16,17 @@ export const Modal = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div
+      onClick={(e) => e.target === e.currentTarget && router.back()}
+      className="fixed inset-0 bg-black/50 z-50  overflow-y-scroll"
+    >
+      <div className="absolute  left-1/2 -translate-x-1/2 top-5">
         {children}
         <Button
           onClick={() => router.back()}
           className="absolute top-0 right-[-4rem] text-white"
         >
-          <CrossIcon/>
+          <CrossIcon />
         </Button>
       </div>
     </div>

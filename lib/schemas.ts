@@ -38,7 +38,20 @@ export const PostSchema = z.object({
   }),
   timestamp: z.date(),
   views: z.number().nonnegative().default(0),
-  comments: z.array(z.object({})),
+  comments: z.array(
+    z.object({
+      id: z.string().uuid(),
+      postId: z.string().uuid(),
+      text: z.string().min(1),
+      likes: z.number().nonnegative(),
+      timestamp: z.date(),
+      author: z.object({
+        id: z.string().uuid(),
+        name: z.string(),
+        avatar: z.string().url(),
+      }),
+    })
+  ),
 });
 
 // Генерация типов

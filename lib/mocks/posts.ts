@@ -1,27 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { Comment, Post, PostSchema, User } from "../schemas";
-
-const generateComment = (postId: string): Comment => ({
-  id: faker.string.uuid(),
-  postId: postId,
-  author: {
-    id: faker.string.uuid(),
-    name: faker.person.fullName(),
-    avatar: faker.image.avatar(),
-  },
-  text: faker.lorem.paragraph(),
-  likes: faker.number.int({ min: 0, max: 100 }),
-  timestamp: faker.date.recent({ days: 7 }),
-});
-
-const generateUser = (): User => ({
-  id: faker.string.uuid(),
-  name: faker.person.fullName(),
-  username: faker.internet.username(),
-  email: faker.internet.email(),
-  phone: faker.phone.number(),
-  avatar: faker.image.avatar(),
-});
+import { Post, PostSchema } from "../schemas";
+import { generateComment } from "./comments";
+import { generateUser } from "./users";
 
 export const generatePost = (): Post => {
   const imageId = faker.number.int({ min: 1, max: 1000 });
@@ -42,7 +22,7 @@ export const generatePost = (): Post => {
     ),
   };
 
-  return PostSchema.parse(post); // Валидация при генерации
+  return PostSchema.parse(post);
 };
 
 export const generatePosts = (count: number) => {
