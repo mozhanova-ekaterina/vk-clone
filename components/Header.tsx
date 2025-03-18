@@ -1,6 +1,7 @@
 import { Pacifico } from "next/font/google";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const pacifico = Pacifico({
   weight: "400",
@@ -13,7 +14,9 @@ export const Header = () => {
       <Link href="/" className="text-3xl">
         <span className={`${pacifico.className} text-primary`}>Insta</span>Clone
       </Link>
-      <Button>upload button</Button>
+      <Button onClick={() => signIn("github", { callbackUrl: "/profile" })}>
+        Sign In
+      </Button>
     </header>
   );
 };

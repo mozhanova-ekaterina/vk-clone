@@ -1,18 +1,16 @@
-'use client';
+"use client";
 
 import { Header } from "@/components/Header";
-import { Feed } from "@/components/feed/Feed";
 import { Layout } from "@/components/layouts/Layout";
+import { observer } from "mobx-react-lite";
 
-
-export default function HomePage() {
-  
+export default observer(function LoginPage() {
   return (
     <Layout
       header={<Header />}
-      center={<Feed />}
+      center={<div>profile</div>}
       leftSide={<div>left side</div>}
       rightSide={<div>right side</div>}
     />
   );
-}
+});

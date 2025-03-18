@@ -1,3 +1,11 @@
+import { User } from "@/lib/schemas";
+import { makeAutoObservable } from "mobx";
+
 export class UserStore{
-  constructor(){}
+  user: User | null = null
+  constructor(){
+    makeAutoObservable(this)
+  }
+
+  
 }
