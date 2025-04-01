@@ -1,7 +1,9 @@
+"use client";
+
 import { Pacifico } from "next/font/google";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const pacifico = Pacifico({
   weight: "400",
@@ -9,14 +11,20 @@ const pacifico = Pacifico({
 });
 
 export const Header = () => {
+  const { data: session } = useSession();
+
   return (
     <header className="flex justify-between py-5">
       <Link href="/" className="text-3xl">
-        <span className={`${pacifico.className} text-primary`}>Insta</span>Clone
+        <span className={`${pacifico.className} text-primary`}>VK</span>Clone
       </Link>
-      <Button onClick={() => signIn("github", { callbackUrl: "/profile" })}>
-        Sign In
-      </Button>
+      {session ? (
+        <Button onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</Button>
+      ) : (
+        <Button onClick={() => signIn("github", { callbackUrl: "/profile" })}>
+          Sign In
+        </Button>
+      )}
     </header>
   );
 };

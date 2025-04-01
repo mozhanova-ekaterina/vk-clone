@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
 import "./globals.css";
-import StoreProvider from "./StoreProvider";
+import Providers from "./Providers";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -22,10 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${lexend.className} antialiased`}>
-        <StoreProvider>
+        <Providers>
           {children}
           {modal}
-        </StoreProvider>
+        </Providers>
       </body>
     </html>
   );

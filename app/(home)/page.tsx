@@ -1,5 +1,3 @@
-'use client';
-
 import { Header } from "@/components/Header";
 import { Feed } from "@/components/feed/Feed";
 import { Layout } from "@/components/layouts/Layout";

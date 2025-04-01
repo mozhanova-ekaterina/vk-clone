@@ -13,5 +13,6 @@ export const authConfig: AuthOptions = {
     async signIn({ user, account, profile }) {
       return true;
     },
+    
   },
 };
